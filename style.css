@@ -1,0 +1,47 @@
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 75vh;
+  min-height: 500px;
+  padding: 10px;
+  margin-top: 50px;
+}
+
+.calculator {
+  width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.screen {
+  width: 294px;
+  height: 100px;
+  background: gray;
+}
+
+.screen {
+  width: 294px;
+  height: 100px;
+  background: gray;
+}
+
+.current-screen {
+  padding: 10px;
+}
+.result-screen {
+  padding: 10px;
+  text-align: end;
+}
+
+.btn {
+  width: 69px;
+  height: 69px;
+  margin: 3px;
+}
+
+.clear {
+  width: 144px;
+}
