@@ -37,26 +37,35 @@ const expo = (x, f) => {
 
 const showValue = (n) => {
   currentScreen.innerHTML += n;
-  currentScreen.scrollLeft += currentScreen.scrollLeftMax
+  currentScreen.scrollLeft += currentScreen.scrollLeftMax;
+};
+
+const showOperator = (n) => {
+  checkNewOperator = currentScreen.innerHTML.indexOf(operator);
+  if (
+    (checkNewOperator && checkNewOperator > 0) ||
+    currentScreen.innerHTML.split(/\ |\+|\x|\-|\÷/).length > 2
+  ) {
+    currentScreen.innerHTML = currentScreen.innerHTML.slice(0, -1) + n;
+  } else {
+    currentScreen.innerHTML += n;
+  }
+  operator = n;
 };
 
 const showResult = (n) => {
-  let numbers = currentScreen.innerHTML.split(/\ |\+|\x|\-|\÷/);
+  let numbers = currentScreen.innerHTML.substring(1).split(/\ |\+|\x|\-|\÷/);
   if (operand1 && numbers.length == 2 && !isNaN(parseInt(numbers[1]))) {
-    operand1 = numbers[0];
+    operand1 = currentScreen.innerHTML[0] + numbers[0];
     operand2 = numbers[1];
     evaluate();
   } else {
     operand1 = currentScreen.innerHTML;
   }
-  
   if (n) {
-    if (currentScreen.innerHTML.includes(operator)) {
-      currentScreen.innerHTML = currentScreen.innerHTML.slice(0, -1) + n
-    } else {
-      currentScreen.innerHTML += n;
-    }
-    operator = n;
+    showOperator(n);
+  } else {
+    evaluate();
   }
 };
 
@@ -73,21 +82,17 @@ const deleteValue = () => {
 };
 
 const evaluate = () => {
-  currentScreen.innerHTML = resultScreen.innerHTML = new Expression(
-    operand1,
-    operand2,
-    operator
-  ).evaluate();
-  resultScreen.innerHTML = currentScreen.innerHTML;
-};
-
-const calculate = (nums, operators) => {
-  let result = 0;
-  result = new Expression(nums[0], nums[1], operators[0]).evaluate();
-  for (i = 2; i < nums.length; i++) {
-    result = new Expression(result, nums[i], operators[i - 1]).evaluate();
+  if (operand1 && operand2 && operator) {
+    let result = new Expression(operand1, operand2, operator).evaluate();
+    operand1 = resultScreen.innerHTML = currentScreen.innerHTML = result;
+    operator = null;
+    operand2 = null;
+  } else if (operand1 && operator) {
+    allClear()
+    resultScreen.innerHTML = "Syntax Error";
+  } else if (operand1) {
+    resultScreen.innerHTML = operand1;
   }
-  return result;
 };
 
 const handleKeyboardInput = (e) => {
@@ -118,4 +123,3 @@ operatorBtn.forEach((button) => {
 });
 
 window.addEventListener("keydown", handleKeyboardInput);
-
